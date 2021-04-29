@@ -1,0 +1,233 @@
+{% load static %}
+{% load loan_extras %}
+<html>
+<head>
+    <title>Loan Risk Calculator</title>
+
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css"
+    />
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <style rel="stylesheet" type="text/css">
+        body {
+            background-image: linear-gradient( 89.9deg,  rgba(208,246,255,1) 0.1%, rgba(255,237,237,1) 47.9%, rgba(255,255,231,1) 100.2% );
+        }
+        #content {
+            width: 85%;
+            margin: 0 auto;
+        }
+        #loan-table {
+            width: 100% !important;
+        }
+        #loan-table thead {
+            background-color: white;
+            text-align: left;
+        }
+        #loan-table tbody {
+            text-align: center;
+        }
+        #loan-table td.loan-score__bad {
+            font-weight: 500;
+            color: red;
+        }
+    </style>
+
+    <script
+            type="text/javascript"
+            src="https://code.jquery.com/jquery-3.5.1.js"
+    ></script>
+    <script
+            type="text/javascript"
+            src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"
+    ></script>
+    <script
+            type="text/javascript"
+            src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"
+    ></script>
+</head>
+<body>
+<section id="content">
+    <div class="mt-5 mb-5">
+        <div class="row mb-5">
+            <div class="col-md-12">
+                <h1 class="text-center">Loan Risk Calculator</h1>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-9">
+                <h3>Some info about this tool</h3>
+                <p>
+                    Some text about this tool.
+                </p>
+            </div>
+            <div class="col-md-3">
+                <h3>Some statistics</h3>
+                <table class="table table-sm table-bordered table-striped table-light">
+                    <thead>
+                    <tr>
+                        <th>Total</th>
+                        <th>Match</th>
+                        <th>Exception</th>
+                        <th>Error</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{{ total }}</td>
+                        <td>{{ status.match }}</td>
+                        <td>{{ status.exception }}</td>
+                        <td>{{ status.error }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table
+                        id="loan-table"
+                        class="table table-sm table-striped table-hover"
+                >
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for object in object_list %}
+                    <tr class="{% loan_risk_calculation_status_class object.risk_calculation_status %}">
+                        <td>
+                            <a href="{% url 'admin:app_loan_change' object.id %}" target="_blank">
+                                {{ object.id }}
+                            </a>
+                        </td>
+                        <td>{{ object.age }}</td>
+                        <td>{{ object.monthly_income }}</td>
+                        <td>{{ object.monthly_expenses }}</td>
+                        <td>{{ object.free_money }}</td>
+                        <td>{{ object.dependents }}</td>
+                        <td>{{ object.external_liabilities }}</td>
+                        <td>{{ object.finished_loans }}</td>
+                        <td>{{ object.prev_loan_interaction }}</td>
+                        <td>{{ object.last_status }}</td>
+                        <td class="{% loan_debt_days_class object.is_bad_loan %}">{{ object.debt_days }}</td>
+                        <td class="{% loan_risk_score_class object.will_be_bad_loan %}">{{ object.risk_score }}</td>
+                        <td>{{ object.risk_calculation_status }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+$(document).ready(function () {
+  $("#loan-table").DataTable({
+    responsive: true,
+    columnDefs: [
+      {
+        targets: 0,
+        title: "ID",
+        orderable: false,
+        searchable: false,
+      },
+      {
+        targets: 1,
+        title: "Age",
+        orderable: true,
+        searchable: false,
+      },
+      {
+        targets: 2,
+        title: "Income",
+        orderable: true,
+        searchable: false,
+      },
+      {
+        targets: 3,
+        title: "Expenses",
+        orderable: true,
+        searchable: false,
+      },
+      {
+        targets: 4,
+        title: "Free Money",
+        orderable: true,
+        searchable: false,
+      },
+      {
+        targets: 5,
+        title: "Dependents",
+        orderable: true,
+        searchable: false,
+      },
+      {
+        targets: 6,
+        title: "External Liabilities",
+        orderable: true,
+        searchable: false,
+      },
+      {
+        targets: 7,
+        title: "Finished Loans",
+        orderable: true,
+        searchable: false,
+      },
+      {
+        targets: 8,
+        title: "Last Contact Status",
+        orderable: true,
+        searchable: false,
+      },
+      {
+        targets: 9,
+        title: "Previous Loan Interaction",
+        orderable: true,
+        searchable: false,
+      },
+      {
+        targets: 10,
+        title: "Debt Days",
+        orderable: true,
+        searchable: false,
+      },
+      {
+        targets: 11,
+        title: "Risk Score",
+        orderable: true,
+        searchable: false
+      },
+      {
+        targets: 12,
+        title: "Status",
+        orderable: true,
+        searchable: true,
+      }
+    ],
+    order: [[0, "asc"]],
+    pageLength: 10,
+  });
+});
+</script>
+</body>
+</html>
