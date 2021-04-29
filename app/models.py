@@ -112,7 +112,7 @@ class Loan(models.Model):
         super(Loan, self).save(*args, **kwargs)
 
     def calculate_is_bad_loan(self, config: LoanConfig) -> bool:
-        return self.debt_days >= config.max_debt_days
+        return self.debt_days > config.max_debt_days
 
     def calculate_risk_score(self) -> float:
         age_weight: float = get_upper_value_weight(LoanAgeConfig, self.age)
@@ -135,6 +135,6 @@ class Loan(models.Model):
         if self.is_bad_loan == self.will_be_bad_loan:
             return RiskCalculationStatus.MATCH
         elif not self.is_bad_loan and self.will_be_bad_loan:
-            return RiskCalculationStatus.ERROR
-        else:
             return RiskCalculationStatus.EXCEPTION
+        else:
+            return RiskCalculationStatus.ERROR

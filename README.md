@@ -54,7 +54,7 @@ Copy the provided URL and open it in your browser - here you should see started 
 ##### 1. Config files upload
 All of your configuration files must be located 
 ```
-/loans/config/import?files=config,age,monthly_income,monthly_expenses,free_money,dependents,external_liabilities,finished_loans,prev-loan-interaction,last_status,debt_days
+/loans/config/import?files=config,age,monthly-income,monthly-expenses,free-money,dependents,external-liabilities,finished-loans,prev-loan-interaction,last-contract-status,debt-days
 ```
 
 ##### 2. Loan database upload
