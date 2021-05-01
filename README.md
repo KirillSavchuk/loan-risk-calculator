@@ -52,13 +52,21 @@ Copy the provided URL and open it in your browser - here you should see started 
 
 ### Upload data
 ##### 1. Config files upload
-All of your configuration files must be located 
+All of your configuration files must be located in `data` directory so that you can easily import all of them via bulk import by executing this `GET` reqeusts:
 ```
-/loans/config/import?files=config,age,monthly-income,monthly-expenses,free-money,dependents,external-liabilities,finished-loans,prev-loan-interaction,last-contract-status,debt-days
+{BASE_URL}/loans/config/import?files=config,age,monthly-income,monthly-expenses,free-money,dependents,external-liabilities,finished-loans,prev-loan-interaction,last-contract-status,debt-days
 ```
+Or you can import any config file manually via admin page.
 
+For example, age configuration import url:
+```
+{BASE_URL}/admin/app/loanconfig/import/
+```
 ##### 2. Loan database upload
-
+TO import all client data, go to this admin page:
+```
+{BASE_URL}/admin/app/loan/import/
+```
 
 
 
